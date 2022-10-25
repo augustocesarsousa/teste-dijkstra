@@ -1,0 +1,13 @@
+Porto Alegre,Canoas,Gravataí/15.3,30.8
+Canoas,Esteio/11.7
+Esteio,Sapucaia do Sul/3.2
+Sapucaia do Sul,São Leopoldo/6.6
+São Leopoldo,Novo Hamburgo/8.9
+Novo Hamburgo,Ivoti,Sapiranga/7.7,13.2
+Ivoti,Dois Irmãos/9.6
+Dois Irmãos,Nova Petrópolis/40.4
+Nova Petrópolis,Gramado/34.6
+Sapiranga,Parobé/17.5
+Parobé,Gramado/48.1
+Gravataí,Taquara/45.4
+Taquara,Parobé/6.0
