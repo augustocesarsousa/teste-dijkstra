@@ -28,7 +28,8 @@ public class LerDoArquivo {
             vertices = s1.get(0)[0].split(",");
 
             v = (Vertice) mapa.get(vertices[0]);
-            if (v == null) v = new Vertice();
+            if (v == null)
+              v = new Vertice();
 
             List<Vertice> vizinhosAtual = new ArrayList<Vertice>();
             List<Aresta> arestasAtual = new ArrayList<Aresta>();
@@ -42,7 +43,8 @@ public class LerDoArquivo {
                 Vertice vit;
                 // vit = g.encontrarVertice(vertices[i]);
                 vit = mapa.get(vertices[i]);
-                if (vit == null) vit = new Vertice();
+                if (vit == null)
+                  vit = new Vertice();
                 vit.setDescricao(vertices[i]);
                 vizinhosAtual.add(vit);
                 mapa.put(vertices[i], vit);
@@ -59,7 +61,8 @@ public class LerDoArquivo {
           else {
             // v = g.encontrarVertice(linha);
             v = (Vertice) mapa.get(linha);
-            if (v == null) v = new Vertice();
+            if (v == null)
+              v = new Vertice();
             v.setDescricao(linha);
             mapa.put(linha, v);
           }
@@ -79,7 +82,7 @@ public class LerDoArquivo {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    //Retornando os vertices
+    // Retornando os vertices
     return g.getVertices();
   }
 
@@ -87,17 +90,13 @@ public class LerDoArquivo {
     Grafo teste = new Grafo();
 
     teste.setVertices(lerGrafo("cidades.txt"));
-    Vertice i1 = new Vertice();
-    Vertice i2 = new Vertice();
-    i1 = teste.encontrarVertice("Porto Alegre");
-    i2 = teste.encontrarVertice("Gramado");
+    Vertice origem = new Vertice();
+    Vertice destino = new Vertice();
+    origem = teste.encontrarVertice("Porto Alegre");
+    destino = teste.encontrarVertice("Gramado");
 
-    List<Vertice> resultado = new ArrayList<Vertice>();
     Dijkstra algoritmo = new Dijkstra();
-    resultado = algoritmo.encontrarMenorCaminhoDijkstra(teste, i1, i2);
+    algoritmo.encontrarMenorCaminhoDijkstra(teste, origem, destino);
 
-    System.out.println(
-      "Esse é o menor caminho feito pelo algoritmo:" + resultado
-    );
   }
 }

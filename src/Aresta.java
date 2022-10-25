@@ -39,4 +39,10 @@ public class Aresta {
   public Vertice getOrigem() {
     return origem;
   }
+
+  @Override
+  public String toString() {
+    return "Aresta [peso=" + peso + ", origem=" + origem + ", destino=" + destino + "]";
+  }
+
 }

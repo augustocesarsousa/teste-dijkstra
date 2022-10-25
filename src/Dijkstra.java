@@ -21,12 +21,13 @@ public class Dijkstra {
   // Lista dos vertices que ainda nao foram visitados
   List<Vertice> naoVisitados = new ArrayList<Vertice>();
 
+  Double distancia = 0d;
+
   // Algoritmo de Dijkstra
-  public List<Vertice> encontrarMenorCaminhoDijkstra(
-    Grafo grafo,
-    Vertice origem,
-    Vertice destino
-  ) {
+  public void encontrarMenorCaminhoDijkstra(
+      Grafo grafo,
+      Vertice origem,
+      Vertice destino) {
     // Adiciona a origem na lista do menor caminho
     menorCaminho.add(origem);
 
@@ -34,9 +35,7 @@ public class Dijkstra {
     for (int i = 0; i < grafo.getVertices().size(); i++) {
       // Vertice atual tem distancia zero, e todos os outros,
       // 9999("infinita")
-      if (
-        grafo.getVertices().get(i).getDescricao().equals(origem.getDescricao())
-      ) {
+      if (grafo.getVertices().get(i).getDescricao().equals(origem.getDescricao())) {
         grafo.getVertices().get(i).setDistancia(0);
       } else {
         grafo.getVertices().get(i).setDistancia(9999);
@@ -45,7 +44,7 @@ public class Dijkstra {
       this.naoVisitados.add(grafo.getVertices().get(i));
     }
 
-    //MUDAR PARA QUICK SORT
+    // MUDAR PARA QUICK SORT
     Collections.sort(naoVisitados);
 
     // O algoritmo continua ate que todos os vertices sejam visitados
@@ -55,7 +54,8 @@ public class Dijkstra {
       // lista
 
       atual = this.naoVisitados.get(0);
-      System.out.println("Pegou esse vertice:  " + atual);
+      // System.out.println("Pegou esse vertice: " + atual);
+      // System.out.println("Menor caminho " + menorCaminho);
       /*
        * Para cada vizinho (cada aresta), calcula-se a sua possivel
        * distancia, somando a distancia do vertice atual com a da aresta
@@ -64,17 +64,14 @@ public class Dijkstra {
        */
       for (int i = 0; i < atual.getArestas().size(); i++) {
         vizinho = atual.getArestas().get(i).getDestino();
-        System.out.println("Olhando o vizinho de " + atual + ": " + vizinho);
+        // System.out.println("Olhando o vizinho de " + atual + ": " + vizinho);
+
         if (!vizinho.verificarVisita()) {
           // Comparando a distância do vizinho com a possível
           // distância
-          if (
-            vizinho.getDistancia() >
-            (atual.getDistancia() + atual.getArestas().get(i).getPeso())
-          ) {
-            vizinho.setDistancia(
-              atual.getDistancia() + atual.getArestas().get(i).getPeso()
-            );
+          if (vizinho.getDistancia() == 0
+              || vizinho.getDistancia() > (atual.getDistancia() + atual.getArestas().get(i).getPeso())) {
+            vizinho.setDistancia(atual.getDistancia() + atual.getArestas().get(i).getPeso());
             vizinho.setPai(atual);
 
             /*
@@ -83,18 +80,24 @@ public class Dijkstra {
              * anterior eh apagada, pois existe um caminho menor
              * vertices pais, ateh o vertice origem.
              */
-            if (vizinho == destino) {
+            if (vizinho != destino) {
               menorCaminho.clear();
               verticeCaminho = vizinho;
               menorCaminho.add(vizinho);
+              distancia = +vizinho.getDistancia();
               while (verticeCaminho.getPai() != null) {
                 menorCaminho.add(verticeCaminho.getPai());
                 verticeCaminho = verticeCaminho.getPai();
               }
               // Ordena a lista do menor caminho, para que ele
               // seja exibido da origem ao destino.
-              //MUDAR PARA QUICK SORT
+              // MUDAR PARA QUICK SORT
               Collections.sort(menorCaminho);
+            }
+
+            if (vizinho == destino) {
+              menorCaminho.add(vizinho);
+              distancia += vizinho.getDistancia();
             }
           }
         }
@@ -107,11 +110,16 @@ public class Dijkstra {
        * Ordena a lista, para que o vertice com menor distancia fique na
        * primeira posicao
        */
-      //MUDAR PARA QUICK SORT
+      // MUDAR PARA QUICK SORT
       Collections.sort(naoVisitados);
-      System.out.println("Nao foram visitados ainda:" + naoVisitados);
+      // System.out.println("Nao foram visitados ainda:" + naoVisitados);
     }
 
-    return menorCaminho;
+    System.out.println(
+        "Rota: " + menorCaminho);
+    System.out.println(
+        "Distância: " + distancia);
+    System.out.println(
+        "Custo da viagem: $" + String.format("%.2f", distancia / 10 * 6.95));
   }
 }
