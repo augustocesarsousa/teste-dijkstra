@@ -1,0 +1,6 @@
+Menor rota ecnontrada: 
+
+Rota: [ Porto Alegre,  Canoas,  Esteio,  Sapucaia do Sul,  São Leopoldo,  Novo Hamburgo,  Sapiranga,  Parobé,  Gramado]
+Quantidade de saltos: 8
+Distância: 124.5Km
+Custo da viagem: $86.53

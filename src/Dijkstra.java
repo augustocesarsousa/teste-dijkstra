@@ -25,9 +25,10 @@ public class Dijkstra {
 
   // Algoritmo de Dijkstra
   public void encontrarMenorCaminhoDijkstra(
-      Grafo grafo,
-      Vertice origem,
-      Vertice destino) {
+    Grafo grafo,
+    Vertice origem,
+    Vertice destino
+  ) {
     // Adiciona a origem na lista do menor caminho
     menorCaminho.add(origem);
 
@@ -35,7 +36,9 @@ public class Dijkstra {
     for (int i = 0; i < grafo.getVertices().size(); i++) {
       // Vertice atual tem distancia zero, e todos os outros,
       // 9999("infinita")
-      if (grafo.getVertices().get(i).getDescricao().equals(origem.getDescricao())) {
+      if (
+        grafo.getVertices().get(i).getDescricao().equals(origem.getDescricao())
+      ) {
         grafo.getVertices().get(i).setDistancia(0);
       } else {
         grafo.getVertices().get(i).setDistancia(9999);
@@ -54,8 +57,8 @@ public class Dijkstra {
       // lista
 
       atual = this.naoVisitados.get(0);
-      // System.out.println("Pegou esse vertice: " + atual);
-      // System.out.println("Menor caminho " + menorCaminho);
+      //System.out.println("Pegou esse vertice: " + atual);
+      //System.out.println("Menor caminho " + menorCaminho);
       /*
        * Para cada vizinho (cada aresta), calcula-se a sua possivel
        * distancia, somando a distancia do vertice atual com a da aresta
@@ -64,16 +67,20 @@ public class Dijkstra {
        */
       for (int i = 0; i < atual.getArestas().size(); i++) {
         vizinho = atual.getArestas().get(i).getDestino();
-        // System.out.println("Olhando o vizinho de " + atual + ": " + vizinho);
+        //System.out.println("Olhando o vizinho de " + atual + ": " + vizinho);
 
         if (!vizinho.verificarVisita()) {
           // Comparando a distância do vizinho com a possível
           // distância
-          if (vizinho.getDistancia() == 0
-              || vizinho.getDistancia() > (atual.getDistancia() + atual.getArestas().get(i).getPeso())) {
-            vizinho.setDistancia(atual.getDistancia() + atual.getArestas().get(i).getPeso());
+          if (
+            vizinho.getDistancia() == 0 ||
+            vizinho.getDistancia() >
+            (atual.getDistancia() + atual.getArestas().get(i).getPeso())
+          ) {
+            vizinho.setDistancia(
+              atual.getDistancia() + atual.getArestas().get(i).getPeso()
+            );
             vizinho.setPai(atual);
-
             /*
              * Se o vizinho eh o vertice procurado, e foi feita uma
              * mudanca na distancia, a lista com o menor caminho
@@ -115,11 +122,34 @@ public class Dijkstra {
       // System.out.println("Nao foram visitados ainda:" + naoVisitados);
     }
 
+    // System.out.println("Rota: " + menorCaminho);
+    // System.out.println("Quantidade de saltos: " + (menorCaminho.size() - 1));
+    // System.out.println("Distância: " + distancia);
+    // System.out.println(
+    //   "Custo da viagem: $" + String.format("%.2f", distancia / 10 * 6.95)
+    // );
+
+    StringBuilder texto = new StringBuilder();
+
+    texto.append("Menor rota encontrada: ");
+    texto.append("\n\n");
+    texto.append("Rota: ");
+    texto.append(menorCaminho);
+    texto.append("\n");
+    texto.append("Quantidade de saltos: ");
+    texto.append(menorCaminho.size() - 1);
+    texto.append("\n");
+    texto.append("Distância: ");
+    texto.append(distancia);
+    texto.append("Km");
+    texto.append("\n");
+    texto.append("Custo da viagem: $");
+    texto.append(String.format("%.2f", distancia / 10 * 6.95));
+
+    GravarNoArquivo.gravar(texto.toString());
+
     System.out.println(
-        "Rota: " + menorCaminho);
-    System.out.println(
-        "Distância: " + distancia);
-    System.out.println(
-        "Custo da viagem: $" + String.format("%.2f", distancia / 10 * 6.95));
+      "Análise de menor rota executado com sucesso, resultado gravado no arquivo rota.txt"
+    );
   }
 }
