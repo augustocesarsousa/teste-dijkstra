@@ -7,7 +7,7 @@ public abstract class GravarNoArquivo {
   public static void gravar(String texto) {
     try {
       // criando o caminho e o nome do arquivo
-      Path filePath = Paths.get("", "rota.txt");
+      Path filePath = Paths.get("", "rotas.txt");
 
       // verificando se o arquivo já existe
       if (Files.notExists(filePath)) {

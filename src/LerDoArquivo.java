@@ -1,102 +1,80 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LerDoArquivo {
+public abstract class LerDoArquivo {
 
   public static List<Vertice> lerGrafo(String nomeArquivo) {
-    Grafo g = new Grafo();
-    Vertice v;
-    File f = new File(nomeArquivo);
+    Grafo grafo = new Grafo();
+    Vertice vertice;
     String vertices[];
-    String linha;
-    ArrayList<String[]> s1 = new ArrayList<String[]>();
+    ArrayList<String[]> cidadeRota = new ArrayList<String[]>();
+
+    Path filePath = Path.of(nomeArquivo);
+
+    List<String> linhas = new ArrayList<>();
+
+    Map<String, Vertice> mapa = new HashMap<String, Vertice>();
 
     try {
-      try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-        Map<String, Vertice> mapa = new HashMap<String, Vertice>();
-
-        while ((linha = br.readLine()) != null) {
-          if (linha.contains(",")) {
-            s1.add(linha.split("/"));
-            vertices = s1.get(0)[0].split(",");
-
-            v = (Vertice) mapa.get(vertices[0]);
-            if (v == null)
-              v = new Vertice();
-
-            List<Vertice> vizinhosAtual = new ArrayList<Vertice>();
-            List<Aresta> arestasAtual = new ArrayList<Aresta>();
-            v.setDescricao(vertices[0]);
-            mapa.put(vertices[0], v);
-
-            if (linha.contains("/")) {
-              String pesoArestas[] = s1.get(0)[1].split(",");
-
-              for (int i = 1; i < vertices.length; i++) {
-                Vertice vit;
-                // vit = g.encontrarVertice(vertices[i]);
-                vit = mapa.get(vertices[i]);
-                if (vit == null)
-                  vit = new Vertice();
-                vit.setDescricao(vertices[i]);
-                vizinhosAtual.add(vit);
-                mapa.put(vertices[i], vit);
-
-                Aresta ait = new Aresta(v, vit);
-                ait.setPeso(Double.parseDouble(pesoArestas[i - 1]));
-                arestasAtual.add(ait);
-              }
-              v.setVizinhos(vizinhosAtual);
-              v.setArestas(arestasAtual);
-            }
-          }
-          // Vertices finais
-          else {
-            // v = g.encontrarVertice(linha);
-            v = (Vertice) mapa.get(linha);
-            if (v == null)
-              v = new Vertice();
-            v.setDescricao(linha);
-            mapa.put(linha, v);
-          }
-
-          g.adicionarVertice(v);
-          s1.clear();
-        }
-        // catch do BufferedReader
-      } catch (NumberFormatException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    } catch (FileNotFoundException e) {
-      System.out.println("Nao encontrou o arquivo");
-      e.printStackTrace();
-    } catch (IOException e) { // catch do readLine
+      linhas = Files.readAllLines(filePath);
+    } catch (IOException e1) {
       // TODO Auto-generated catch block
-      e.printStackTrace();
+      e1.printStackTrace();
+    }
+
+    for (String linha : linhas) {
+      if (linha.contains(",")) {
+        cidadeRota.add(linha.split("/"));
+        vertices = cidadeRota.get(0)[0].split(",");
+
+        vertice = (Vertice) mapa.get(vertices[0]);
+        if (vertice == null)
+          vertice = new Vertice();
+
+        List<Vertice> vizinhosAtual = new ArrayList<Vertice>();
+        List<Aresta> arestasAtual = new ArrayList<Aresta>();
+        vertice.setDescricao(vertices[0]);
+        mapa.put(vertices[0], vertice);
+
+        if (linha.contains("/")) {
+          String pesoArestas[] = cidadeRota.get(0)[1].split(",");
+
+          for (int i = 1; i < vertices.length; i++) {
+            Vertice vtc;
+            vtc = mapa.get(vertices[i]);
+            if (vtc == null)
+              vtc = new Vertice();
+            vtc.setDescricao(vertices[i]);
+            vizinhosAtual.add(vtc);
+            mapa.put(vertices[i], vtc);
+
+            Aresta aresta = new Aresta(vertice, vtc);
+            aresta.setPeso(Double.parseDouble(pesoArestas[i - 1]));
+            arestasAtual.add(aresta);
+          }
+          vertice.setVizinhos(vizinhosAtual);
+          vertice.setArestas(arestasAtual);
+        }
+      }
+      // Vertices finais
+      else {
+        // v = g.encontrarVertice(linha);
+        vertice = (Vertice) mapa.get(linha);
+        if (vertice == null)
+          vertice = new Vertice();
+        vertice.setDescricao(linha);
+        mapa.put(linha, vertice);
+      }
+
+      grafo.adicionarVertice(vertice);
+      cidadeRota.clear();
     }
     // Retornando os vertices
-    return g.getVertices();
-  }
-
-  public static void main(String args[]) {
-    Grafo teste = new Grafo();
-
-    teste.setVertices(lerGrafo("cidades.txt"));
-    Vertice origem = new Vertice();
-    Vertice destino = new Vertice();
-    origem = teste.encontrarVertice("Porto Alegre");
-    destino = teste.encontrarVertice("Gramado");
-
-    Dijkstra algoritmo = new Dijkstra();
-    algoritmo.encontrarMenorCaminhoDijkstra(teste, origem, destino);
-
+    return grafo.getVertices();
   }
 }
